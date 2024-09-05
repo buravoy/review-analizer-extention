@@ -9,30 +9,19 @@ const paramSet = {
 
   },
 
-  wb: {
+  wildberries: {
 
   }
 }
 
 const siteDetect = () => {
-  const host = location.host;
-
-  if (host.includes('market')) {
-    return 'market'
-  }
-
-  if (host.includes('ozon')) {
-    return 'ozon'
-  }
-
-  if (host.includes('wildberries')) {
-    return 'wildberries'
-  }
+  if (location.host.includes('market')) return 'market';
+  if (location.host.includes('ozon')) return 'ozon';
+  if (location.host.includes('wildberries')) return 'wildberries';
+  return null
 }
 
-const param = paramSet[siteDetect()];
-
-const globalParser = async () => {
+const globalParser = async (param) => {
   const reviews = document.querySelectorAll(`${param.review_wrap_selector}:not([parsed=true])`);
 
   for (const review of reviews) {
@@ -49,4 +38,8 @@ const globalParser = async () => {
   }
 }
 
-window.addEventListener('scroll', globalParser);
+const site = siteDetect();
+
+if (site) {
+  window.addEventListener('scroll', () => globalParser( paramSet[site]));
+}
