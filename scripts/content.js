@@ -1,16 +1,26 @@
 const paramSet = {
   market: {
-    review_wrap_selector: '[data-auto=review-item]',
-    review_text_selector: '[itemprop=description]',
-    parseFn: (ctx) => ctx.getAttribute('content'),
+    review_wrap_selector: '[data-auto="review-item"]',
+    parseFn: (ctx) => {
+      const el = ctx.querySelector('[itemprop="description"]');
+      return el?.getAttribute('content')
+    },
   },
 
   ozon: {
-
+    review_wrap_selector: '[data-review-uuid]',
+    parseFn: (ctx) => {
+      const el = ctx.children[1]?.children[1];
+      return el?.querySelector('span')?.textContent.trim();
+    },
   },
 
   wildberries: {
-
+    review_wrap_selector: '[itemprop="review"]',
+    parseFn: (ctx) => {
+      const el = ctx.querySelector('[itemprop="reviewBody"]');
+      return el?.textContent.trim();
+    },
   }
 }
 
@@ -25,15 +35,13 @@ const site = siteDetect();
 const param = paramSet[site]
 
 const placeBadge = ({analysis}) => {
-
-
-  // analysis.forEach((i) => {
-  //   const div = document.createElement('div');
-  //   div.setAttribute('class', 'badge');
-  //   div.innerText = `parsed: ${i.uid}`
-  //   const review = document.querySelector(`${param.review_wrap_selector} [parsed=true]`);
-  //   review.appendChild(div)
-  // })
+  analysis.forEach((i) => {
+    const div = document.createElement('div');
+    div.setAttribute('class', 'badge');
+    div.innerText = `parsed: ${i.uid}`
+    const review = document.querySelector(`[data-uid="${i.uid}"]`);
+    review.appendChild(div)
+  })
 }
 
 const fetchApi = (data) => {
@@ -69,7 +77,7 @@ const fetchApi = (data) => {
 
 const globalParser = () => {
   const reviews = document.querySelectorAll(`${param.review_wrap_selector}:not([parsed=true])`);
-  if (!reviews || reviews.length === 0) return;
+  if (!reviews.length) return;
 
   let dataArray = [];
 
@@ -79,11 +87,9 @@ const globalParser = () => {
     review.setAttribute('parsed', 'true');
     review.setAttribute('data-uid', uid);
 
-    const context = review.querySelector(param.review_text_selector);
-
     dataArray.push({
       uid: uid,
-      comment: param.parseFn(context)
+      comment: param.parseFn(review)
     })
   }
 
