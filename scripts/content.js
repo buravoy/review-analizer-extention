@@ -21,7 +21,7 @@ const siteDetect = () => {
   return null
 }
 
-const globalParser = async (param) => {
+const globalParser = (param) => {
   const reviews = document.querySelectorAll(`${param.review_wrap_selector}:not([parsed=true])`);
 
   for (const review of reviews) {
@@ -31,10 +31,11 @@ const globalParser = async (param) => {
     const div = document.createElement('div');
     div.setAttribute('class', 'badge');
     div.innerText = `parsed: ${uid}`
-    review.appendChild(div);
     const context = review.querySelector(param.review_text_selector);
-    console.log(param.parseFn(context));
-    await new Promise(res => setTimeout(res, 0))
+
+    console.log( param.parseFn(context) );
+
+    review.appendChild(div);
   }
 }
 
