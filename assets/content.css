@@ -1,8 +1,8 @@
-[parsed=true] {
+.analyze {
     position: relative;
 }
 
-[parsed=true] > .badge {
+.analyze > .badge {
     position: absolute;
     right: 0;
     top: 0;
