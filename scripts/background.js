@@ -1,8 +1,16 @@
 const dataSet = {}
 
+const countTotal = (dataSet) => {
+  const positive = dataSet?.countPositive ?? 0;
+  const neutral = dataSet?.countNeutral ?? 0;
+  const negative = dataSet?.countNegative ?? 0;
+
+  return (positive + negative + neutral).toString();
+}
+
 const enablePopup = (tabId) => {
-  chrome.action.setPopup({ popup: 'popup.html' }).then();
-  chrome.action.setBadgeText({text: (dataSet[tabId].count ?? 0).toString()}).then();
+  chrome.action.setPopup({ tabId, popup: 'popup.html' }).then();
+  chrome.action.setBadgeText({text: countTotal(dataSet[tabId])}).then();
 }
 
 const disablePopup = () => {
@@ -12,18 +20,22 @@ const disablePopup = () => {
 
 const prepareDataset = (tabId, msg) => {
   Object.assign(dataSet[tabId], msg.info);
-  chrome.action.setBadgeText({text: (dataSet[tabId].count ?? 0).toString()}).then();
+  chrome.action.setBadgeText({text: countTotal(dataSet[tabId])}).then();
 }
 
 chrome.tabs.onActivated.addListener((activeInfo) => {
   if (!dataSet[activeInfo.tabId]) return disablePopup();
   enablePopup(activeInfo.tabId);
-
 });
 
 
-chrome.runtime.onMessage.addListener((msg, sender) => {
-  console.log(msg, sender)
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  if (msg.from === 'popup') {
+    switch (msg.subject) {
+      case 'get_data': return sendResponse(dataSet[msg.tabId]);
+    }
+    return ;
+  }
 
   if (msg.from === 'content') {
     switch (msg.subject) {

@@ -24,46 +24,55 @@ const paramSet = {
   }
 }
 
-const siteDetect = () => {
-  if (location.host.includes('market')) return 'market';
-  if (location.host.includes('ozon')) return 'ozon';
-  if (location.host.includes('wildberries')) return 'wildberries';
+const siteDetect = (native) => {
+  if (location.host.includes('market')) return native ? 'Яндекс маркет' : 'market';
+  if (location.host.includes('ozon')) return native ? 'OZON' : 'ozon';
+  if (location.host.includes('wildberries')) return native ? 'Wildberries' : 'wildberries';
   return null;
 }
 
 const site = siteDetect();
 const param = paramSet[site]
 
-let parseCount = 0;
+let countPositive = 0;
+let countNegative = 0;
+let countNeutral = 0;
+let confidence = 0;
 
 const placeBadge = ({analysis}) => {
-  parseCount += analysis.length
-
-  chrome.runtime.sendMessage({
-    from: 'content',
-    subject: 'dataset',
-    info: {count: parseCount}
-  }).then();
-
-
   analysis.forEach((i) => {
     const div = document.createElement('div');
     div.classList.add('badge');
     div.classList.add(i.sentiment);
 
-    const sentimentSmile = (sent) => {
+    const sentimentPrepare = (sent) => {
       switch (sent) {
-        case 'positive': return '🤩';
-        case 'negative': return '🤬';
-        case 'neutral': return '🙄';
+        case 'positive':
+          countPositive++;
+          return '🤩';
+        case 'negative':
+          countNegative++;
+          return '🤬';
+        case 'neutral':
+          countNeutral++;
+          return '🙄';
       }
     }
 
-    let innerHtml = `<span class="smile" title="Наша оценка отзыва">${sentimentSmile(i.sentiment)}</span><span class="confidence" title="Степень достоверности нашей оценки">${i.confidence}</span>`;
+    confidence += +i.confidence
+
+    let innerHtml = `<span class="smile" title="Наша оценка отзыва">${sentimentPrepare(i.sentiment)}</span><span class="confidence" title="Степень достоверности нашей оценки">${i.confidence}</span>`;
     if (i.robot) innerHtml = `<span class="robot" title="Похоже отзыв написан не человеком или ради накрутки">${i.robot}</span>` + innerHtml;
     div.innerHTML = innerHtml;
     const review = document.querySelector(`[data-uid="${i.uid}"]`);
     review.appendChild(div);
+
+
+    chrome.runtime.sendMessage({
+      from: 'content',
+      subject: 'dataset',
+      info: {countPositive, countNegative, countNeutral, confidence}
+    }).then();
   })
 }
 
@@ -124,14 +133,27 @@ const globalParser = () => {
   fetchApi(dataArray);
 }
 
-
-
-
 chrome.runtime.sendMessage({
   from: 'content',
   subject: site ? 'enable' : 'disable',
 }).then();
 
+chrome.runtime.onMessage.addListener((msg, sender) => {
+  console.log(msg, sender)
+  if (msg.from === 'popup') {
+    switch (msg.subject) {
+      case 'toggle_visible':
+        const badges = document.querySelectorAll('.analyze > .badge');
+
+        console.log(badges)
+
+        document.querySelectorAll('.analyze .badge').forEach(el => {
+          msg.value ? el.classList.add('hide') : el.classList.remove('hide');
+        });
+        break;
+    }
+  }
+});
 
 if (site) {
   chrome.runtime.sendMessage({
@@ -142,7 +164,7 @@ if (site) {
   chrome.runtime.sendMessage({
     from: 'content',
     subject: 'dataset',
-    info: { market: site }
+    info: { market: siteDetect(true) }
   }).then();
 
   window.addEventListener('scroll', () => globalParser());

@@ -9,18 +9,20 @@
 </head>
 <body>
     <h3>AI анализатор отзывов</h3>
-    <p>Магазин: <span id="market"></span></p>
-    <p>Обработано отзывов на текущей странице: <span id="count"></span></p>
+    <p>Магазин: <span id="market" class="label"></span></p>
+    <p>Обработано отзывов на странице: <span id="count" class="label"></span></p>
     <div class="separator"></div>
-    <p>Положительные 🤩: <span id="positive"></span></p>
-    <p>Нейтральные 🙄: <span id="neutral"></span></p>
-    <p>Отрицательные 🤬: <span id="negative"></span></p>
+    <p>Положительные 🤩: <span id="positive" class="label"></span></p>
+    <p>Нейтральные 🙄: <span id="neutral" class="label"></span></p>
+    <p>Отрицательные 🤬: <span id="negative" class="label"></span></p>
     <div class="separator"></div>
-    <p>Средняя достоверность оценки: <span id="confidence"></span></p>
+    <p>Средняя достоверность оценки: <span id="confidence" class="label"></span></p>
     <div class="separator"></div>
     <label>
-        <input type="checkbox">
+        <input type="checkbox" id="on_page">
         <span>Скрыть бейджи на странице</span>
     </label>
+
+    <script src="scripts/popup.js"></script>
 </body>
 </html>
