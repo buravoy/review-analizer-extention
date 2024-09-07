@@ -6,8 +6,40 @@
     position: absolute;
     right: 0;
     top: 0;
-    background-color: darkred;
-    color: white;
     border-radius: 5px;
     padding: 3px 6px;
+    opacity: 0.5;
+    display: flex;
+    align-items: center;
+    transition: .3s;
+    transform: translateX(calc(100% + 5px));
+}
+
+.analyze > .badge:hover {
+    opacity: 1;
+    cursor: default;
+}
+
+.analyze > .badge.positive {
+    background-color: rgba(0, 128, 0, 0.5);
+}
+.analyze > .badge.negative {
+    background-color: rgba(139, 0, 0, 0.5);
+}
+.analyze > .badge.neutral {
+    background-color: rgba(128, 128, 128, 0.5);;
+}
+
+.analyze > .badge > .smile,
+.analyze > .badge > .robot {
+    font-size: 20px;
+}
+
+.analyze > .badge > .robot {
+    margin-right: 5px;
+}
+
+.analyze > .badge > .confidence {
+    color: white;
+    margin-left: 5px;
 }

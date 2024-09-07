@@ -1,10 +1,26 @@
 <!doctype html>
-<html>
-  <head>
-      <link rel="stylesheet" href="assets/popup.css">
-  </head>
-  <body>
-    <p>in progress...</p>
-    <script src="scripts/popup.js"></script>
-  </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="assets/popup.css">
+</head>
+<body>
+    <h3>AI анализатор отзывов</h3>
+    <p>Магазин: <span id="market"></span></p>
+    <p>Обработано отзывов на текущей странице: <span id="count"></span></p>
+    <div class="separator"></div>
+    <p>Положительные 🤩: <span id="positive"></span></p>
+    <p>Нейтральные 🙄: <span id="neutral"></span></p>
+    <p>Отрицательные 🤬: <span id="negative"></span></p>
+    <div class="separator"></div>
+    <p>Средняя достоверность оценки: <span id="confidence"></span></p>
+    <div class="separator"></div>
+    <label>
+        <input type="checkbox">
+        <span>Скрыть бейджи на странице</span>
+    </label>
+</body>
 </html>

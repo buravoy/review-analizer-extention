@@ -1,0 +1,22 @@
+{
+  "name": "review-analizer-extention",
+  "version": "1.0.0",
+  "description": "1. Clone this repository. 2. Load this directory in Chrome as an [unpacked extension][1].",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/buravoy/review-analizer-extention.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/buravoy/review-analizer-extention/issues"
+  },
+  "homepage": "https://github.com/buravoy/review-analizer-extention#readme",
+  "devDependencies": {
+    "chrome-types": "^0.1.301"
+  }
+}
