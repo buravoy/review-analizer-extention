@@ -26,3 +26,14 @@ label input {
 .label {
     font-weight: bold;
 }
+
+.review {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.review label {
+    margin-left: auto;
+}

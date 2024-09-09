@@ -99,10 +99,10 @@ const fetchApi = (data) => {
       resolve(res)
     }, 1000)
   }).then(placeBadge);
-
+  // end fake request
 
   // todo:
-  //  fetch('url', {
+  //  fetch('<url>', {
   //    method: 'POST',
   //    body: JSON.stringify(data),
   //  })
