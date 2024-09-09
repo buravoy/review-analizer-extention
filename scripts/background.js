@@ -19,7 +19,7 @@ const disablePopup = () => {
 }
 
 const prepareDataset = (tabId, msg) => {
-  Object.assign(dataSet[tabId], msg.info);
+  Object.assign(dataSet[tabId], msg?.info ?? {});
   chrome.action.setBadgeText({text: countTotal(dataSet[tabId])}).then();
 }
 

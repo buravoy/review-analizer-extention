@@ -49,19 +49,19 @@ const placeBadge = ({analysis}) => {
       switch (sent) {
         case 'positive':
           countPositive++;
-          return '🤩';
+          return {title: 'Полезный отзыв', icon: '🔥'};
         case 'negative':
           countNegative++;
-          return '🤬';
+          return {title: 'Бесполезный отзыв', icon: '😶'};
         case 'neutral':
           countNeutral++;
-          return '🙄';
+          return {title: 'Нейтральный отзыв', icon: '💩'};
       }
     }
 
     confidence += +i.confidence
 
-    let innerHtml = `<span class="smile" title="Наша оценка отзыва">${sentimentPrepare(i.sentiment)}</span><span class="confidence" title="Степень достоверности нашей оценки">${i.confidence}</span>`;
+    let innerHtml = `<span class="smile" title="${sentimentPrepare(i.sentiment).title}">${sentimentPrepare(i.sentiment).icon}</span><span class="confidence" title="Степень достоверности нашей оценки">${i.confidence}</span>`;
     if (i.robot) innerHtml = `<span class="robot" title="Похоже отзыв написан не человеком или ради накрутки">${i.robot}</span>` + innerHtml;
     div.innerHTML = innerHtml;
     const review = document.querySelector(`[data-uid="${i.uid}"]`);
