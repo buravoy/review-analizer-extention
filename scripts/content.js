@@ -52,15 +52,16 @@ const sentimentPrepare = (sent) => {
 
         case 'negative':
             countNegative++;
-            return {title: 'Бесполезный отзыв', icon: '😶'};
+            return {title: 'Бесполезный отзыв', icon: '💩'};
 
         case 'neutral':
             countNeutral++;
-            return {title: 'Нейтральный отзыв', icon: '💩'};
+            return {title: 'Нейтральный отзыв', icon: '😶'};
     }
 }
 
 const placeBadge = (i) => {
+    console.log('res', i)
     const div = document.createElement('div');
     div.classList.add('badge');
     div.classList.add(i.sentiment);
@@ -76,9 +77,6 @@ const placeBadge = (i) => {
 
     review.appendChild(div);
 
-
-    console.log({countPositive, countNegative, countNeutral, confidence})
-
     chrome.runtime.sendMessage({
         from: 'content',
         subject: 'dataset',
@@ -89,7 +87,7 @@ const placeBadge = (i) => {
 const fetchApi = (dataArr) => {
     dataArr.forEach(data => {
         const {uid, comment} = data;
-        console.log(data)
+        console.log('req', data)
         fetch('http://127.0.0.1:8000/analyze_review', {
             method: 'POST',
             headers: {
@@ -119,8 +117,6 @@ const globalParser = () => {
             comment: param.parseFn(review)
         })
     }
-
-    console.log('request', dataArray)
 
     fetchApi(dataArray);
 }
